@@ -43,5 +43,5 @@ for courtNumber in range(2,68):
 
         if foundBound:
              break
-        boundary =  int(boundary//1.15)
+        boundary =  int(boundary//1.1)
 
