@@ -1,10 +1,20 @@
-import urllib.request, urllib.error
+import requests
+import urllib3
+import urllib.error
+requests.packages.urllib3.disable_warnings()
+requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
+
 try:
-    file = f'https://services.pacourts.us/public/v1/cases/CP-01-CR-0001399-2018'
-    req = urllib.request.Request(file,headers={'User-Agent': 'Mozilla/5.0'})
-    webpage = urllib.request.urlopen(req)
-    print(webpage.getcode())
-    if webpage.getcode() == 200 :
-        print("That address does exist")
-except urllib.error.HTTPError as e:
-        print( e.code )
+   requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += 'HIGH:!DH:!aNULL'
+except AttributeError:
+    # no pyopenssl support used / needed / available
+    pass
+
+http = urllib3.PoolManager()
+webpage = http.request('GET', f'https://services.pacourts.us/public/v1/cases/CP-01-CR-0101399-2018')
+print(webpage.status)
+if webpage.status == 200 :
+    print("That address does exist")
+elif webpage.status == 404:
+    print("That address does not exist")
+
