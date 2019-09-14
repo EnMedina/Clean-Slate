@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import requests
 import urllib3
 import logging
@@ -21,7 +22,7 @@ numAttempt = 1
 http = urllib3.PoolManager()
 logFile = open("/home/ec2-user/Clean-Slate/datascraper/boundaries.txt", "a+")
 workFile = open("/home/ec2-user/Clean-Slate/datascraper/workfile.txt", "a+")
-for courtNumber in range(21,30):
+for courtNumber in range(30,68):
     boundary = 30000
     courtString = format(courtNumber, "02d")
     foundBound = False
@@ -49,5 +50,4 @@ for courtNumber in range(21,30):
         if foundBound:
              break
         boundary =  int(boundary//1.1)
-
 

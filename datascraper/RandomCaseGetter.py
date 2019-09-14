@@ -1,3 +1,4 @@
+
 import random
 import requests
 import urllib3
@@ -14,23 +15,12 @@ try:
 except AttributeError:
     # no pyopenssl support used / needed / available
     pass
-
-
-
-while True:
-    cnt_Gets = 0
-    curr_url = get_random_case_url()
-    time.sleep(1)
-    webpage = http.request('GET',curr_url)
-    if webpage.status == 200:
-        save_file = open(f'json/{curr_url[45:]}.json','w+')
-        save_file.write(webpage.body)
-    elif webpage.status == 429:
-        time.sleep(3605)
-    cnt_Gets += 1
-    print('Number of requests so far: ' + str(cnt_Gets))
-
-
+http = urllib3.PoolManager()
+cnt_Gets = 1
+try:
+    os.mkdir('json')
+except:
+    pass
 
 def get_random_case_url():
     arr = [0,1399,16791,17754,20264,20987,26377,28658,29534,36711,38784,40496,40496,
@@ -47,3 +37,19 @@ def get_random_case_url():
     str_cp   = format(ind_cp,"02d")
     str_case = format(case_number,"07d")
     return f'https://services.pacourts.us/public/v1/cases/CP-{str_cp}-CR-{str_case}-2018'
+
+while True:
+    curr_url = get_random_case_url()
+    time.sleep(1)
+    webpage = http.request('GET',curr_url)
+    if webpage.status == 200:
+        print('Request Number ' + str(cnt_Gets) + ': Successfully got ' + curr_url)
+        save_file = open(f'json/{curr_url[45:]}.json','wb+')
+        save_file.write(webpage.read())
+    elif webpage.status == 404:
+        print('Request Number ' + str(cnt_Gets) + ': Could not get ' + curr_url)
+    elif webpage.status == 429:
+        print('Reached error 429, waiting for an hour')
+        time.sleep(3605)
+    cnt_Gets += 1
+
