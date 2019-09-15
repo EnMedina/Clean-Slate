@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+
+#
+#   This script goes to Pensilvania court website and for each CP will get the hightest numbered case
+#   The boundary is reduced by 10% each time, this can be modified in the last line division
+#
+
 import requests
 import urllib3
 import logging
