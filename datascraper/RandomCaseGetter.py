@@ -1,4 +1,4 @@
-
+import os
 import random
 import requests
 import urllib3
@@ -45,7 +45,8 @@ while True:
     if webpage.status == 200:
         print('Request Number ' + str(cnt_Gets) + ': Successfully got ' + curr_url)
         save_file = open(f'json/{curr_url[45:]}.json','wb+')
-        save_file.write(webpage.read())
+        save_file.write(webpage.data)
+        save_file.close()
     elif webpage.status == 404:
         print('Request Number ' + str(cnt_Gets) + ': Could not get ' + curr_url)
     elif webpage.status == 429:
